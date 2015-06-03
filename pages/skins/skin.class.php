@@ -5,7 +5,7 @@
  * @subpackage skins
  * @author ljfa-ag
  * @copyright Copyright (c) 2010/2011 by ljfa-ag
- * @license <http://www.gnu.org/licenses/gpl.html> GNU Gerneral Public License
+ * @license <http://www.apache.org/licenses/LICENSE-2.0> Apache License 2.0
  * @version 1.0
  */
 class skin
