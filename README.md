@@ -12,6 +12,6 @@ Note: The documentation and some parts of Kyuss were written in German (unfortun
 however Kyuss itself should support German and English localization.
 
 ##Credits
-The art (blau_h) was designed by loardaniel.
+The art (blau_h) was designed by lordaniel.
 
 The name Kyuss was taken from a (former) Stoner Rock band of the same name.
