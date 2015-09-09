@@ -44,12 +44,12 @@ abstract class plugin
      * URL oder Maniacode der aktuellen Seite
      * @var string
      */
-	public $url;
+    public $url;
     /**
      * URL zum Plugin-Ordner
      * @var string
      */
-	public $dir;
+    public $dir;
     /**
      * Gibt an, ob das Plugin gerade benutzt oder konfiguriert wird
      * @var bool
@@ -65,7 +65,7 @@ abstract class plugin
      * Die eigentliche Benutzerschnittstelle des Plugins
      * @return void
      */
-	abstract public function show();
+    abstract public function show();
     /**
      * Die Konfigurationsschnittstelle des Plugins
      * @return void|string
@@ -122,14 +122,14 @@ abstract class plugin
      */
     public static function getSharedListItem($list, $property, $default = NULL)
     {
-		//if(!in_array($list, static::$shared_lists) && isset(static::$name))
+        //if(!in_array($list, static::$shared_lists) && isset(static::$name))
         //    throw new InvalidArgumentException("Plugin was not declared as that it uses the list '$list'");
-			
+            
         global $_db;
         
         $query = $_db->prepare('SELECT `value` FROM `'.PREFIX.'_shared_lists` WHERE `list` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('ss', $list, $property);
         $query->execute();
         $query->bind_result($value);
@@ -154,8 +154,8 @@ abstract class plugin
         global $_db;
         
         $query = $_db->prepare('SELECT `property`, `value` FROM `'.PREFIX.'_shared_lists` WHERE `list` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('s', $list);
         $query->execute();
         $query->bind_result($property, $value);
@@ -185,8 +185,8 @@ abstract class plugin
         if(is_null(self::getSharedListItem($list, $property)))
         {
             $query = $_db->prepare('INSERT INTO `'.PREFIX.'_shared_lists` (`list`, `property`, `value`) VALUES (?, ?, ?)');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('sss', $list, $property, $value);
             $query->execute();
             $query->close();
@@ -194,13 +194,13 @@ abstract class plugin
         else
         {
             $query = $_db->prepare('UPDATE `'.PREFIX.'_shared_lists` SET `value` = ? WHERE `list` = ? AND `property` = ?');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('sss', $value, $list, $property);
             $query->execute();
             $query->close();
         }
-		return true;
+        return true;
     }
     
     /**
@@ -217,12 +217,12 @@ abstract class plugin
         global $_db;
         
         $query = $_db->prepare('DELETE FROM `'.PREFIX.'_shared_lists` WHERE `list` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('ss', $list, $property);
         $query->execute();
         $query->close();
-		return true;
+        return true;
     }
 }
 
@@ -243,28 +243,28 @@ abstract class widget extends plugin
      * @param string $foldername Name der Klasse
      * @param bool $inConfig Gibt an, ob die Benutzer- oder die Konfigurationsschnittstelle des Widgets benutzt wird
      */
-	public function __construct($foldername, $inConfig = false)
-	{
-		$this->foldername = $foldername;
-		$this->dir = DIR.'widgets/'.$foldername.'/';
-		$this->inConfig = $inConfig;
-		if($inConfig)
-		{
+    public function __construct($foldername, $inConfig = false)
+    {
+        $this->foldername = $foldername;
+        $this->dir = DIR.'widgets/'.$foldername.'/';
+        $this->inConfig = $inConfig;
+        if($inConfig)
+        {
             if($_GET['action'] == 'textpages')
                 $this->url = KYUSS.'?p=admin&action=textpages&but='.$_GET['but'].'&widget='.$_GET['widget'].'&configure';
             elseif($_GET['action'] == 'globalw')
                 $this->url = KYUSS.'?p=admin&action=globalw&widget='.$_GET['widget'].'&configure';
-		}
-		else
-		{
-			if(isset($_GET['p']))
+        }
+        else
+        {
+            if(isset($_GET['p']))
                 $this->url = KYUSS.'?p='.$_GET['p'];
             elseif(isset($_GET['t']))
                 $this->url = KYUSS.'?t='.$_GET['t'];
             else
                 $this->url = KYUSS.'?t=1';
-		}
-	}
+        }
+    }
     
     /**
      * @ignore
@@ -274,8 +274,8 @@ abstract class widget extends plugin
         global $_db;
         
         $query = $_db->prepare('SELECT `value` FROM `'.PREFIX.'_plugin_config` WHERE `widget_id` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('is', $this->widgetid, $property);
         $query->execute();
         $query->bind_result($value);
@@ -295,8 +295,8 @@ abstract class widget extends plugin
         global $_db;
         
         $query = $_db->prepare('SELECT `property`, `value` FROM `'.PREFIX.'_plugin_config` WHERE `widget_id` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('i', $this->widgetid);
         $query->execute();
         $query->bind_result($property, $value);
@@ -319,8 +319,8 @@ abstract class widget extends plugin
         if(is_null($this->getConfig($property)))
         {
             $query = $_db->prepare('INSERT INTO `'.PREFIX.'_plugin_config` (`widget_id`, `property`, `value`) VALUES (?, ?, ?)');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('iss', $this->widgetid, $property, $value);
             $query->execute();
             $query->close();
@@ -328,13 +328,13 @@ abstract class widget extends plugin
         else
         {
             $query = $_db->prepare('UPDATE `'.PREFIX.'_plugin_config` SET `value` = ? WHERE `widget_id` = ? AND `property` = ?');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('sis', $value, $this->widgetid, $property);
             $query->execute();
             $query->close();
         }
-		return true;
+        return true;
     }
     
     /**
@@ -345,12 +345,12 @@ abstract class widget extends plugin
         global $_db;
         
         $query = $_db->prepare('DELETE FROM `'.PREFIX.'_plugin_config` WHERE `widget_id` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('is', $this->widgetid, $property);
         $query->execute();
         $query->close();
-		return true;
+        return true;
     }
     
     /**
@@ -367,21 +367,21 @@ abstract class widget extends plugin
             $widgets = split(',', $widgets);
             foreach($widgets as $widgetid)
             {
-				$row = $_db->query("SELECT * FROM `".PREFIX."_used_widgets` WHERE `id` = $widgetid")->fetch_object();
-				include_once("widgets/$row->name/widget.php");
-				$widget = new $row->name($row->name);
-				$widget->widgetid = $widgetid;
-				echo "<frame posn=\"$row->x $row->y $row->z\">";
-				try
+                $row = $_db->query("SELECT * FROM `".PREFIX."_used_widgets` WHERE `id` = $widgetid")->fetch_object();
+                include_once("widgets/$row->name/widget.php");
+                $widget = new $row->name($row->name);
+                $widget->widgetid = $widgetid;
+                echo "<frame posn=\"$row->x $row->y $row->z\">";
+                try
                 {
-					$widget->show();
+                    $widget->show();
                 }
-				catch(exception $ex)
-				{
-					$_dico['de']['ex'] = "Das Widget '$row->name' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-					$_dico['en']['ex'] = "The widget '$row->name' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-					echo '<label textid="ex" textsize="2"/>';
-				}
+                catch(exception $ex)
+                {
+                    $_dico['de']['ex'] = "Das Widget '$row->name' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+                    $_dico['en']['ex'] = "The widget '$row->name' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+                    echo '<label textid="ex" textsize="2"/>';
+                }
                 echo '</frame>';
             }
         }
@@ -400,17 +400,17 @@ abstract class page extends plugin
      * @param bool $inConfig Gibt an, ob die Benutzer- oder die Konfigurationsschnittstelle der Seite benutzt wird
      */ 
     public function __construct($foldername, $inConfig = false)
-	{
-		$this->foldername = $foldername;
-		$this->dir = DIR.'pages/'.$foldername.'/';
-		$this->inConfig = $inConfig;
-		if($inConfig)
-		{
+    {
+        $this->foldername = $foldername;
+        $this->dir = DIR.'pages/'.$foldername.'/';
+        $this->inConfig = $inConfig;
+        if($inConfig)
+        {
             $this->url = KYUSS.'?p=admin&action=pgconf&page='.$foldername;
-		}
-		else
-			$this->url = KYUSS.'?p='.$_GET['p'];
-	}
+        }
+        else
+            $this->url = KYUSS.'?p='.$_GET['p'];
+    }
     
     /**
      * @ignore
@@ -420,8 +420,8 @@ abstract class page extends plugin
         global $_db;
         
         $query = $_db->prepare('SELECT `value` FROM `'.PREFIX.'_plugin_config` WHERE `page` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('ss', $this->foldername, $property);
         $query->execute();
         $query->bind_result($value);
@@ -441,8 +441,8 @@ abstract class page extends plugin
         global $_db;
         
         $query = $_db->prepare('SELECT `property`, `value` FROM `'.PREFIX.'_plugin_config` WHERE `page` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('s', $this->foldername);
         $query->execute();
         $query->bind_result($property, $value);
@@ -465,8 +465,8 @@ abstract class page extends plugin
         if(is_null($this->getConfig($property)))
         {
             $query = $_db->prepare('INSERT INTO `'.PREFIX.'_plugin_config` (`page`, `property`, `value`) VALUES (?, ?, ?)');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('sss', $this->foldername, $property, $value);
             $query->execute();
             $query->close();
@@ -474,13 +474,13 @@ abstract class page extends plugin
         else
         {
             $query = $_db->prepare('UPDATE `'.PREFIX.'_plugin_config` SET `value` = ? WHERE `page` = ? AND `property` = ?');
-			if(!$query)
-				return false;
+            if(!$query)
+                return false;
             $query->bind_param('sss', $value, $this->foldername, $property);
             $query->execute();
             $query->close();
         }
-		return true;
+        return true;
     }
     
     /**
@@ -491,12 +491,12 @@ abstract class page extends plugin
         global $_db;
         
         $query = $_db->prepare('DELETE FROM `'.PREFIX.'_plugin_config` WHERE `page` = ? AND `property` = ?');
-		if(!$query)
-			return false;
+        if(!$query)
+            return false;
         $query->bind_param('ss', $this->foldername, $property);
         $query->execute();
         $query->close();
-		return true;
+        return true;
     }
 }
 
@@ -525,13 +525,13 @@ function setGeneralConfig($property, $value)
 {
     global $_db;
     
-	$query = $_db->prepare("UPDATE `".PREFIX."_config` SET `value` = ? WHERE `property` = ?");
-	if(!$query)
-		return false;
+    $query = $_db->prepare("UPDATE `".PREFIX."_config` SET `value` = ? WHERE `property` = ?");
+    if(!$query)
+        return false;
     $query->bind_param('ss', $value, $property);
     $query->execute();
     $query->close();
-	return true;
+    return true;
 }
 
 /**

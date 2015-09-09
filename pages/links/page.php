@@ -11,13 +11,13 @@
 class links extends page
 {
     public static $name = 'Links';
-	public static $desc = 'Eine Seite, auf die man Links zu anderen Manialinks setzen kann.';
-	public static $hasConfig = true;
-	public static $shared_lists = Array('links');
-	
+    public static $desc = 'Eine Seite, auf die man Links zu anderen Manialinks setzen kann.';
+    public static $hasConfig = true;
+    public static $shared_lists = Array('links');
+    
     public function show()
     {
-		echo '<label posn="0 0 0" style="TextRankingsBig" text="Links"/>';
+        echo '<label posn="0 0 0" style="TextRankingsBig" text="Links"/>';
         
         $links = self::getSharedListArray('links');
         ksort($links);
@@ -36,24 +36,24 @@ class links extends page
                 $y -= 5;
         }
     }
-	
-	public function configure()
-	{
+    
+    public function configure()
+    {
         global $_dico;
-		$_dico['de'] += Array(
-			'linksv' => 'Links verwalten',
+        $_dico['de'] += Array(
+            'linksv' => 'Links verwalten',
             'save' => '$fffSpeichern',
             'delete' => '$fffEntfernen',
             'back' => '$fffZurück',
             'addl' => '$000Hinzufügen'
-		);
-		$_dico['en'] += Array(
-			'linksv' => 'Manage links',
+        );
+        $_dico['en'] += Array(
+            'linksv' => 'Manage links',
             'save' => '$fffSave',
             'delete' => '$fffDelete',
             'back' => '$fffBack',
             'addl' => '$000Add'
-		);
+        );
         
         echo '<label posn="0 0 0" style="TextRankingsBig" textid="linksv"/>';
         

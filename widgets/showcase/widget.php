@@ -11,12 +11,12 @@
 class showcase extends widget
 {
     public static $name = 'Showcase';
-	public static $desc = 'Zum Vorstellen der neuesten Strecke und des neuesten Skins';
+    public static $desc = 'Zum Vorstellen der neuesten Strecke und des neuesten Skins';
     public static $shared_lists = array('tracks', 'skins');
     public static $hasConfig = true;
     
     public function show()
-    {	
+    {   
         $mode = self::getConfig('useSkins', false) ? 'skins' : 'tracks';
         $newest = self::getConfig('useNewest', false);
         $tracks = self::getSharedListArray($mode);
@@ -32,27 +32,27 @@ class showcase extends widget
         $track = $tracks[$number];
         
         echo '<quad posn="0 0 0" sizen="40 11" style="BgsPlayerCard" substyle="BgCard" manialink="'.KYUSS.'?p='.$mode.'&amp;info='.$track->id.'" addplayerid="1"/>
-		<quad posn="1 -1 1" sizen="12 9" image="./'.$track->getImage().'"/>
-		<label posn="14 -1 0" sizen="26" textsize="4" text="'.htmlspecialchars($track->name).'"/>
-		<label posn="14 -4.5 0">'.$track->author."\nDownloads: ".$track->downloads.'</label>';
+        <quad posn="1 -1 1" sizen="12 9" image="./'.$track->getImage().'"/>
+        <label posn="14 -1 0" sizen="26" textsize="4" text="'.htmlspecialchars($track->name).'"/>
+        <label posn="14 -4.5 0">'.$track->author."\nDownloads: ".$track->downloads.'</label>';
     }
     
     public function configure()
     {
-  		global $_dico;
-		
-		$_dico['de'] += Array(
+        global $_dico;
+        
+        $_dico['de'] += Array(
             'type' => 'Typ:',
             'mode' => 'Modus:',
             'newest' => 'Neueste',
             'random' => 'Zufällig',
-		);
-		$_dico['en'] += Array(
+        );
+        $_dico['en'] += Array(
             'type' => 'Type:',
             'mode' => 'Mode:',
             'newest' => 'Newest',
             'random' => 'Random',
-		);
+        );
         
         if(isset($_GET['skins']))
             self::setConfig('useSkins', $_GET['skins'] != '0');

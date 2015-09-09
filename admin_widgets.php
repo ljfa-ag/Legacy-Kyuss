@@ -86,15 +86,15 @@ $_dico['en'] += Array(
                 $stmt->bind_param('sssi', $foldername, getStaticProperty($foldername, 'name'), getStaticProperty($foldername, 'desc'), $hc);
                 $stmt->execute();
                 $stmt->close();
-				$lists = unserialize(getGeneralConfig('shared_lists'));
-				foreach(getStaticProperty($foldername, 'shared_lists') as $list)
-				{
-					if(array_key_exists($list, $lists))
-						$lists[$list]++;
-					else
-						$lists[$list] = 1;
-				}
-				setGeneralConfig('shared_lists', serialize($lists));
+                $lists = unserialize(getGeneralConfig('shared_lists'));
+                foreach(getStaticProperty($foldername, 'shared_lists') as $list)
+                {
+                    if(array_key_exists($list, $lists))
+                        $lists[$list]++;
+                    else
+                        $lists[$list] = 1;
+                }
+                setGeneralConfig('shared_lists', serialize($lists));
             }
         }
     

@@ -81,13 +81,13 @@ if(isset($_GET['widget']) OR isset($wadded))
         $widget->widgetid = $row->id;
         try
         {
-			$save = $widget->configure();
+            $save = $widget->configure();
         }
         catch(exception $ex)
         {
-			$_dico['de']['ex'] = "Das Konfigurationsseite von '$row->name' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-			$_dico['en']['ex'] = "The configuration page of '$row->name' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-			echo '<label textid="ex" textsize="2"/>';
+            $_dico['de']['ex'] = "Das Konfigurationsseite von '$row->name' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+            $_dico['en']['ex'] = "The configuration page of '$row->name' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+            echo '<label textid="ex" textsize="2"/>';
         }
         echo '<quad posn="10 -52 0" sizen="20 5" valign="center" halign="center" style="Bgs1" substyle="BgButton" manialink="'.KYUSS.'?p=admin&amp;action=globalw&amp;widget='.$_GET['widget'].'"/>
         <label posn="10 -52 0" valign="center" halign="center" textid="endc" textcolor="000"/>';

@@ -31,13 +31,13 @@ if(isset($_GET['page']))
     try
     {
         $cfg->configure();
-	}
-	catch(exception $ex)
-	{
-		$_dico['de']['ex'] = "Die Konfigurationsseite von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-		$_dico['en']['ex'] = "The configuration page of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-		echo '<label textid="ex"/>';
-	}
+    }
+    catch(exception $ex)
+    {
+        $_dico['de']['ex'] = "Die Konfigurationsseite von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+        $_dico['en']['ex'] = "The configuration page of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+        echo '<label textid="ex"/>';
+    }
     $foldername = $_db->real_escape_string($foldername);
     $id = $_db->query("SELECT `id` FROM `".PREFIX."_pages` WHERE `folder_name` = '$foldername' LIMIT 1")->fetch_object()->id;
     echo '

@@ -11,10 +11,10 @@
 class skins extends page
 {
     public static $name = 'Skins';
-	public static $desc = 'Eine Seite, von der Besucher Fahrzeuge herunterladen können.';
-	public static $hasConfig = true;
-	public static $shared_lists = Array('skins');
-	
+    public static $desc = 'Eine Seite, von der Besucher Fahrzeuge herunterladen können.';
+    public static $hasConfig = true;
+    public static $shared_lists = Array('skins');
+    
     public function show()
     {
         global $_dico;
@@ -30,106 +30,106 @@ class skins extends page
         );
         
         if(isset($_GET['addc']))
-		{
-			$skin = self::getSharedListItem('skins', $_GET['info']);
+        {
+            $skin = self::getSharedListItem('skins', $_GET['info']);
             $deny1 = explode("&#0;", $skin->comments[0], 2);
-			$deny2 = explode("&#0;", $skin->comments[1], 2);
-			if($deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'])
+            $deny2 = explode("&#0;", $skin->comments[1], 2);
+            if($deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'])
                 return;
-			if($_GET['addc'] != '')
-			{
-				$comment = substr($_GET['addc'], 0, 100);
-				$comment = htmlspecialchars($comment);
+            if($_GET['addc'] != '')
+            {
+                $comment = substr($_GET['addc'], 0, 100);
+                $comment = htmlspecialchars($comment);
                 $comment = stripslashes($comment);
-				$comment = "$_GET[playerlogin]&#0;$_GET[nickname]\$z\n$comment";
-				array_unshift($skin->comments, $comment);
-				self::setSharedListItem('skins', intval($_GET['info']), $skin);
-			}
-			else
-			{
-				echo '<label posn="18 0 0" halign="center" style="TextRankingsBig" textid="addc"/>
-				<frame posn="0 -4 0">
-					<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-					<entry posn="1 -1 0" sizen="34 14.67" autonewline="1" name="comment"/>
-				</frame>
-				<frame posn="0 -20.67 0">
-					<quad posn="0 0 0" sizen="36 15" style="Bgs1" substyle="BgList"/>
-					<label posn="1 -1 0" sizen="34" autonewline="1" textid="cinfo"/>
-					<label posn="18 -10.25 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;addc=comment" addplayerid="1" textid="addc"/>
-				</frame>';
-				return;
-			}
-		}
+                $comment = "$_GET[playerlogin]&#0;$_GET[nickname]\$z\n$comment";
+                array_unshift($skin->comments, $comment);
+                self::setSharedListItem('skins', intval($_GET['info']), $skin);
+            }
+            else
+            {
+                echo '<label posn="18 0 0" halign="center" style="TextRankingsBig" textid="addc"/>
+                <frame posn="0 -4 0">
+                    <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                    <entry posn="1 -1 0" sizen="34 14.67" autonewline="1" name="comment"/>
+                </frame>
+                <frame posn="0 -20.67 0">
+                    <quad posn="0 0 0" sizen="36 15" style="Bgs1" substyle="BgList"/>
+                    <label posn="1 -1 0" sizen="34" autonewline="1" textid="cinfo"/>
+                    <label posn="18 -10.25 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;addc=comment" addplayerid="1" textid="addc"/>
+                </frame>';
+                return;
+            }
+        }
         if(isset($_GET['info']))
-		{
+        {
             $skin = self::getSharedListItem('skins', $_GET['info']);
             $_dico['de']['info'] = "Modellautor: $skin->modelauthor
 Skinautor: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nUmgebung: $skin->envi");
-			$_dico['en']['info'] = "Model author: $skin->modelauthor
+            $_dico['en']['info'] = "Model author: $skin->modelauthor
 Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $skin->envi");
             if($skin->desc == '')
-			{
-				$_dico['en']['desc'] = '$iNo description.';
-				$_dico['de']['desc'] = '$iKeine Beschreibung vorhanden.';
-			}
+            {
+                $_dico['en']['desc'] = '$iNo description.';
+                $_dico['de']['desc'] = '$iKeine Beschreibung vorhanden.';
+            }
             else
-				$_dico['en']['desc'] = $skin->desc;
+                $_dico['en']['desc'] = $skin->desc;
             $page = intval($_GET['cpage']);
             if(count($skin->comments) == 0)
-			{
-				$comments = Array('$iKein Kommentar vorhanden.');
+            {
+                $comments = Array('$iKein Kommentar vorhanden.');
                 $deny = false;
             }
-			else
-			{
-				$deny1 = explode("&#0;", $skin->comments[0], 2);
-				$deny2 = explode("&#0;", $skin->comments[1], 2);
-				$deny = $deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'];
-				$comments = array_slice($skin->comments, 3*$page);
+            else
+            {
+                $deny1 = explode("&#0;", $skin->comments[0], 2);
+                $deny2 = explode("&#0;", $skin->comments[1], 2);
+                $deny = $deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'];
+                $comments = array_slice($skin->comments, 3*$page);
                 
                 function exploder($x)
                 {
                     $ret = explode("&#0;", $x, 2);
                     return $ret[1];
                 }
-				$comments = array_map('exploder', $comments);
-			}
+                $comments = array_map('exploder', $comments);
+            }
             $code = is_null($skin->maniacode) ? ($this->getConfig('code', '').'?id='.$skin->id) : $skin->maniacode;
             echo '<quad posn="-1 1 0" sizen="65 33.5" style="Bgs1" substyle="BgList"/>
-			<label posn="32 0 1" halign="center" textsize="4" text="'.$skin->name.'"/>
-			<quad posn="0 -4 1" sizen="22.5 22.5" image="./'.$skin->getImage().'"/>
-			<label posn="23.5 -4 1" textsize="4" textid="info"/>
-			<quad posn="46 -22.5 1" sizen="5 5" style="Icons128x128_1" substyle="'.$skin->difficulty.'"/>
-			<label posn="32 -27.5 1" halign="center" style="CardButtonMedium" manialink="'.$code.'" text="Download"/>
-			<quad posn="-1 -33 0" sizen="65 22" style="Bgs1" substyle="BgList"/>
-			<label posn="0 -34 0" sizen="63" autonewline="1" textid="desc"/>
-			<frame posn="64.5 1 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0].'</label>
-			</frame>
-			<frame posn="64.5 -15.67 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1].'</label>
-			</frame>
-			<frame posn="64.5 -32.33 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2].'</label>
-			</frame>
-			<frame posn="64.5 -49 0">
-				<quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>';
-			if(!$deny)
-				echo '<label posn="18 -1 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;addc" textid="addc" addplayerid="1"/>';
-			if($page == 0)
-				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
-			else
-				echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;cpage='.($page-1).'"/>';
-			if($page >= count($skin->comments)/3-1)
-				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
-			else
-				echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;cpage='.($page+1).'"/>';
-			echo '</frame>';
-			return;
-		}
+            <label posn="32 0 1" halign="center" textsize="4" text="'.$skin->name.'"/>
+            <quad posn="0 -4 1" sizen="22.5 22.5" image="./'.$skin->getImage().'"/>
+            <label posn="23.5 -4 1" textsize="4" textid="info"/>
+            <quad posn="46 -22.5 1" sizen="5 5" style="Icons128x128_1" substyle="'.$skin->difficulty.'"/>
+            <label posn="32 -27.5 1" halign="center" style="CardButtonMedium" manialink="'.$code.'" text="Download"/>
+            <quad posn="-1 -33 0" sizen="65 22" style="Bgs1" substyle="BgList"/>
+            <label posn="0 -34 0" sizen="63" autonewline="1" textid="desc"/>
+            <frame posn="64.5 1 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0].'</label>
+            </frame>
+            <frame posn="64.5 -15.67 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1].'</label>
+            </frame>
+            <frame posn="64.5 -32.33 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2].'</label>
+            </frame>
+            <frame posn="64.5 -49 0">
+                <quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>';
+            if(!$deny)
+                echo '<label posn="18 -1 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;addc" textid="addc" addplayerid="1"/>';
+            if($page == 0)
+                echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
+            else
+                echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;cpage='.($page-1).'"/>';
+            if($page >= count($skin->comments)/3-1)
+                echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
+            else
+                echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.$this->url.'&amp;info='.$skin->id.'&amp;cpage='.($page+1).'"/>';
+            echo '</frame>';
+            return;
+        }
         
         echo '<label posn="0 0 0" style="TextRankingsBig" text="Skins"/>
         <label posn="0 -52.5 0" textid="pages"/>';
@@ -151,24 +151,24 @@ Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $sk
             echo '<label posn="0 -5 0" textid="notracks"/>';
         $skins = array_slice($skins, 8*$seite);
         for($i = 0; $i < 8; $i++)
-		{
-			$pos = ($i < 4) ? '0 '.(-4-12*$i).' 0' : '50 '.(44-12*$i).' 0';
-			$skin = $skins[$i];
-			if(!$skin)
-				break;
-			echo '<frame posn="'.$pos.'">
-			<quad posn="0 0 0" sizen="49 11" style="BgsPlayerCard" substyle="BgCard" manialink="'.$this->url.'&amp;info='.$skin->id.'" addplayerid="1"/>
-			<quad posn="1 -1 1" sizen="9 9" image="./'.$skin->getImage().'"/>
-			<label posn="11 -1 0" textsize="4" text="'.htmlspecialchars($skin->name).'"/>
-			<label posn="11 -4.5 0">'.$skin->skinauthor."\nDownloads: ".$skin->downloads.'</label>
-			</frame>';
-		}
+        {
+            $pos = ($i < 4) ? '0 '.(-4-12*$i).' 0' : '50 '.(44-12*$i).' 0';
+            $skin = $skins[$i];
+            if(!$skin)
+                break;
+            echo '<frame posn="'.$pos.'">
+            <quad posn="0 0 0" sizen="49 11" style="BgsPlayerCard" substyle="BgCard" manialink="'.$this->url.'&amp;info='.$skin->id.'" addplayerid="1"/>
+            <quad posn="1 -1 1" sizen="9 9" image="./'.$skin->getImage().'"/>
+            <label posn="11 -1 0" textsize="4" text="'.htmlspecialchars($skin->name).'"/>
+            <label posn="11 -4.5 0">'.$skin->skinauthor."\nDownloads: ".$skin->downloads.'</label>
+            </frame>';
+        }
     }
-	
-	public function configure()
-	{
+    
+    public function configure()
+    {
         global $_dico;
-		$_dico['de'] += Array(
+        $_dico['de'] += Array(
             'skinsv' => 'Skins verwalten',
             'maniacode' => "Maniacode zum Download:\nDie URL für den Code lautet: \"".DIR."index.php?maniacode=pages/skins/download\"",
             'adds' => 'Skin hochladen',
@@ -183,8 +183,8 @@ Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $sk
             'commv' => '$fffKommentare verwalten',
             'edit' => '$fffBearbeiten',
             'delete' => '$fffEntfernen'
-		);
-		$_dico['en'] += Array(
+        );
+        $_dico['en'] += Array(
             'skinsv' => 'Manage skins',
             'maniacode' => "Maniacode for downloading:\nThe URL for the code is: \"".DIR."index.php?maniacode=pages/skins/download\"",
             'adds' => 'Upload skin',
@@ -199,7 +199,7 @@ Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $sk
             'commv' => '$fffManage comments',
             'edit' => '$fffEdit',
             'delete' => '$fffDelete'
-		);
+        );
         
         if(isset($_GET['delete']))
         {
@@ -360,40 +360,40 @@ Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $sk
                     $ret = explode("&#0;", $x, 2);
                     $x = array($ret[1], $k);
                 }
-				array_walk($comments, '_walker_sk');
+                array_walk($comments, '_walker_sk');
                 $comments = array_slice($comments, 3*$page);
                 echo '<frame posn="25 -5 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[0]))
                     echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;editc='.$comments[0][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;delc='.$comments[0][1].'"/>
-    				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0][0].'</label>';
-    			echo '</frame>
-    			<frame posn="25 -21.67 0">
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0][0].'</label>';
+                echo '</frame>
+                <frame posn="25 -21.67 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[1]))
-    				echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;editc='.$comments[1][1].'"/>
+                    echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;editc='.$comments[1][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;delc='.$comments[1][1].'"/>
-    				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1][0].'</label>';
-    			echo '</frame>
-    			<frame posn="25 -38.33 0">
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1][0].'</label>';
+                echo '</frame>
+                <frame posn="25 -38.33 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[2]))
-       				echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;editc='.$comments[2][1].'"/>
+                    echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;editc='.$comments[2][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;delc='.$comments[2][1].'"/>
-       				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2][0].'</label>';
-    			echo '</frame>
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2][0].'</label>';
+                echo '</frame>
                 <frame posn="25 -55 0">
-				<quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>
+                <quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>
                 <label posn="18 -1 1" halign="center" style="CardButtonMedium" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'" text="Back"/>';
                 if($page == 0)
-    				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
-    			else
-    				echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;cpage='.($page-1).'"/>';
-    			if($page >= count($skin->comments)/3-1)
-    				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
-    			else
-    				echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;cpage='.($page+1).'"/>';
+                    echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
+                else
+                    echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;cpage='.($page-1).'"/>';
+                if($page >= count($skin->comments)/3-1)
+                    echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
+                else
+                    echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.htmlspecialchars($this->url).'&amp;skin='.$skin->id.'&amp;commv&amp;cpage='.($page+1).'"/>';
                 echo '</frame>';
                 return;
             }
@@ -446,7 +446,7 @@ Skin author: $skin->skinauthor".(is_null($skin->envi) ? '' : "\nEnvironment: $sk
             }
         }
         return;
-	}
+    }
     
     public function save(&$skin = NULL)
     {

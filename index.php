@@ -37,7 +37,7 @@ require('connect.php');
  */
 $_db = @new mysqli(HOST, USERNAME, PASSWORD, DB_NAME);
 if($_db->connect_error)
-	die('<?xml version="1.0" encoding="utf-8" ?>
+    die('<?xml version="1.0" encoding="utf-8" ?>
 <manialink>
 <timeout>0</timeout>
 <label halign="center">Error: '.$_db->connect_error.'</label>
@@ -66,8 +66,8 @@ if(isset($_GET['maniacode'])
 && (strpos($_GET['maniacode'], 'pages') === 0 || strpos($_GET['maniacode'], 'widgets') === 0)
 )
 {
-	require("$_GET[maniacode].php");
-	exit;
+    require("$_GET[maniacode].php");
+    exit;
 }
 
 echo '<?xml version="1.0" encoding="utf-8" ?>
@@ -131,23 +131,23 @@ elseif(isset($_GET['p']))
     if(!file_exists("pages/$_GET[p]/page.php"))
     {
         $_dico['de']['err404'] = 'Fehler 404: Die angegebene Seite existiert nicht!';
-		$_dico['en']['err404'] = 'Error 404: This page does not exist!';
+        $_dico['en']['err404'] = 'Error 404: This page does not exist!';
         echo '<label style="TextCardRaceRank" textid="err404"/>';
     }
         else
         {
-    	require_once("pages/$_GET[p]/page.php");
-    	$page = new $_GET['p']($_GET['p']);
-    	try
-    	{
-    		$page->show();
-    	}
-    	catch(exception $ex)
-    	{
-    		$_dico['de']['ex'] = "Die Seite '$_GET[p]' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-    		$_dico['en']['ex'] = "The page '$_GET[p]' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-    		echo '<label textid="ex"/>';
-    	}
+        require_once("pages/$_GET[p]/page.php");
+        $page = new $_GET['p']($_GET['p']);
+        try
+        {
+            $page->show();
+        }
+        catch(exception $ex)
+        {
+            $_dico['de']['ex'] = "Die Seite '$_GET[p]' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+            $_dico['en']['ex'] = "The page '$_GET[p]' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+            echo '<label textid="ex"/>';
+        }
     }
 }
 else

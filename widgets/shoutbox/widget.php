@@ -11,19 +11,19 @@
 class shoutbox extends widget
 {
     public static $name = 'Shoutbox';
-	public static $desc = 'Eine Shoutbox';
+    public static $desc = 'Eine Shoutbox';
     
     public function show()
     {
-		global $_dico;
-		
-		$_dico['de'] += Array(
+        global $_dico;
+        
+        $_dico['de'] += Array(
             'deny' => 'Sie haben vor kurzem schon einen Eintrag hinzugefügt!'
-		);
-		$_dico['en'] += Array(
+        );
+        $_dico['en'] += Array(
             'deny' => 'You recently already added an entry!'
-		);
-		
+        );
+        
         $deny = false;
         $eintraege = $this->getConfig('eintraege', Array());
         if($_GET['eintr'] != '')
@@ -39,7 +39,7 @@ class shoutbox extends widget
             }
         }
         
-		echo '<quad posn="0 0 0" sizen="40 41" style="Bgs1" substyle="NavButton"/>';
+        echo '<quad posn="0 0 0" sizen="40 41" style="Bgs1" substyle="NavButton"/>';
         $y = -1;
         foreach($eintraege as $eintr)
         {

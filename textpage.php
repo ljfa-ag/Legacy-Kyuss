@@ -33,5 +33,5 @@ if(isset($_GET['chpos']))
 widget::includeWidgets($widgets);
 
 if($tpage == 1)
-	$_SESSION['nb'] = $_db->query("SELECT `id` FROM `".PREFIX."_navigation` WHERE `type` = 'textpage' AND `target` = 1")->fetch_object()->id;
+    $_SESSION['nb'] = $_db->query("SELECT `id` FROM `".PREFIX."_navigation` WHERE `type` = 'textpage' AND `target` = 1")->fetch_object()->id;
 ?>

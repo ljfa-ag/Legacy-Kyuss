@@ -11,7 +11,7 @@
 class theme extends page
 {
     public static $name = 'Theme-Auswahl';
-	public static $desc = 'Eine Seite, in der die Benutzer ihr favorisiertes Theme auswählen können.';
+    public static $desc = 'Eine Seite, in der die Benutzer ihr favorisiertes Theme auswählen können.';
     
     public function show()
     {

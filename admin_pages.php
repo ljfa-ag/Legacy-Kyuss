@@ -53,13 +53,13 @@ $_dico['en'] += Array(
                 try
                 {
                     $cfg->save();
-            	}
-            	catch(exception $ex)
-            	{
-            		$_dico['de']['ex'] = "Das Speichern der Konfiguration von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-            		$_dico['en']['ex'] = "The saving of the configuration of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-            		echo '<label posn="0 -32" textid="ex"/>';
-            	}
+                }
+                catch(exception $ex)
+                {
+                    $_dico['de']['ex'] = "Das Speichern der Konfiguration von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+                    $_dico['en']['ex'] = "The saving of the configuration of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+                    echo '<label posn="0 -32" textid="ex"/>';
+                }
             }
             
             return;
@@ -76,24 +76,24 @@ $_dico['en'] += Array(
         {
             if(stristr($_GET['uninstall'], '..') !== false)
                 return;
-			include_once("pages/$_GET[uninstall]/page.php");
-			$lists = unserialize(getGeneralConfig('shared_lists'));
-			foreach(getStaticProperty($_GET['uninstall'], 'shared_lists') as $list)
-			{
-				if($lists[$list] == 1)
-				{
-					unset($lists[$list]);
-					$_db->query("DELETE FROM `".PREFIX."_shared_lists` WHERE `list` = '$list'");
-				}
-				else
-					$lists[$list]--;
-			}
-			setGeneralConfig('shared_lists', serialize($lists));
-			
+            include_once("pages/$_GET[uninstall]/page.php");
+            $lists = unserialize(getGeneralConfig('shared_lists'));
+            foreach(getStaticProperty($_GET['uninstall'], 'shared_lists') as $list)
+            {
+                if($lists[$list] == 1)
+                {
+                    unset($lists[$list]);
+                    $_db->query("DELETE FROM `".PREFIX."_shared_lists` WHERE `list` = '$list'");
+                }
+                else
+                    $lists[$list]--;
+            }
+            setGeneralConfig('shared_lists', serialize($lists));
+            
             require_once('delete_folder.php');
             delete_folder('pages/'.$_GET['uninstall']);
             $_db->query("DELETE FROM `".PREFIX."_pages` WHERE `folder_name` = '".$_db->real_escape_string($_GET['uninstall'])."'");
-			$_db->query("DELETE FROM `".PREFIX."_plugin_config` WHERE `page` = '".$_db->real_escape_string($_GET['uninstall'])."'");
+            $_db->query("DELETE FROM `".PREFIX."_plugin_config` WHERE `page` = '".$_db->real_escape_string($_GET['uninstall'])."'");
         }
         
         if(isset($_GET['install']))
@@ -123,19 +123,19 @@ $_dico['en'] += Array(
                 $foldername = $_GET['install'];
                 include_once("pages/$foldername/page.php");
                 $stmt = $_db->prepare("INSERT INTO `".PREFIX."_pages` (`folder_name`, `name`, `desc`, `hasConfig`) VALUES (?, ?, ?, ?)");
-				$hasConfig = getStaticProperty($foldername, 'hasConfig') ? 1 : 0;
+                $hasConfig = getStaticProperty($foldername, 'hasConfig') ? 1 : 0;
                 $stmt->bind_param('sssi', $foldername, getStaticProperty($foldername, 'name'), getStaticProperty($foldername, 'desc'), $hasConfig);
                 $stmt->execute();
                 $stmt->close();
-				$lists = unserialize(getGeneralConfig('shared_lists'));
-				foreach(getStaticProperty($foldername, 'shared_lists') as $list)
-				{
-					if(array_key_exists($list, $lists))
-						$lists[$list]++;
-					else
-						$lists[$list] = 1;
-				}
-				setGeneralConfig('shared_lists', serialize($lists));
+                $lists = unserialize(getGeneralConfig('shared_lists'));
+                foreach(getStaticProperty($foldername, 'shared_lists') as $list)
+                {
+                    if(array_key_exists($list, $lists))
+                        $lists[$list]++;
+                    else
+                        $lists[$list] = 1;
+                }
+                setGeneralConfig('shared_lists', serialize($lists));
             }
         }
         
@@ -152,13 +152,13 @@ $_dico['en'] += Array(
             try
             {
                 $save = $cfg->configure();
-        	}
-        	catch(exception $ex)
-        	{
-        		$_dico['de']['ex'] = "Die Konfigurationsseite von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
-        		$_dico['en']['ex'] = "The configuration page of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
-        		echo '<label textid="ex"/>';
-        	}
+            }
+            catch(exception $ex)
+            {
+                $_dico['de']['ex'] = "Die Konfigurationsseite von '$foldername' hat einen unbehandelten Ausnahmefehler verursacht:\n\$o".$ex->getMessage()."\$z\nStack-Trace:\n".$ex->getTraceAsString();
+                $_dico['en']['ex'] = "The configuration page of '$foldername' has thrown an uncaught exception:\n\$o".$ex->getMessage()."\$z\nStack trace:\n".$ex->getTraceAsString();
+                echo '<label textid="ex"/>';
+            }
             $foldername = $_db->real_escape_string($foldername);
             $id = $_db->query("SELECT `id` FROM `".PREFIX."_pages` WHERE `folder_name` = '$foldername' LIMIT 1")->fetch_object()->id;
             echo '

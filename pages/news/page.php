@@ -11,10 +11,10 @@
 class news extends page
 {
     public static $name = 'News';
-	public static $desc = 'Eine Seite, auf der Besucher Neuigkeiten eintragen können.';
-	public static $hasConfig = true;
-	public static $shared_lists = Array('news');
-	
+    public static $desc = 'Eine Seite, auf der Besucher Neuigkeiten eintragen können.';
+    public static $hasConfig = true;
+    public static $shared_lists = Array('news');
+    
     public function show()
     {
         addDico('de', array(
@@ -73,9 +73,9 @@ class news extends page
         else
             echo '<quad posn="99 -57 1" sizen="3.5 3.5" halign="right" valign="center" style="Icons64x64_1" substyle="ArrowNext" manialink="'.$this->encurl().'&amp;pg='.($page+1).'"/>';
     }
-	
-	public function configure()
-	{
+    
+    public function configure()
+    {
         global $_dico, $_db;
         addDico('de', array(
             'newsv' => 'News verwalten',

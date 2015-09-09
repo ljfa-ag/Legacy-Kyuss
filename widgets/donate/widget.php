@@ -11,11 +11,11 @@
 class donate extends widget
 {
     public static $name = 'Donate';
-	public static $desc = 'Zum Spenden';
+    public static $desc = 'Zum Spenden';
     public static $hasConfig = true;
     
     public function show()
-    {	
+    {   
         $codes = self::getConfig('codes', array('', '', '', '', '', ''));
         $amounts = self::getConfig('amounts', array(10, 20, 50, 100, 250));
         echo '<quad posn="0 0 0" sizen="29.5 4" valign="center" style="Bgs1" substyle="NavButton"/>
@@ -30,18 +30,18 @@ class donate extends widget
     
     public function configure()
     {
-  		global $_dico;
-		
-		$_dico['de'] += Array(
+        global $_dico;
+        
+        $_dico['de'] += Array(
             'save' => '$fffSpeichern',
             'maniacode' => "Die URL für den Code lautet: \"".DIR."index.php?maniacode=widgets/donate/thanks\"",
             'amounts' => 'Beträge:'
-		);
-		$_dico['en'] += Array(
+        );
+        $_dico['en'] += Array(
             'save' => '$fffSave',
             'maniacode' => "The URL for the code is: \"".DIR."index.php?maniacode=widgets/donate/thanks\"",
             'amounts' => 'Amounts:'
-		);
+        );
         
         if(isset($_GET['code10']))
         {

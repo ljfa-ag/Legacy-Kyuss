@@ -21,11 +21,11 @@ if(!(isset($_GET['p']) || isset($_GET['t'])))
 }
 if(isset($_GET['sm']) || isset($_GET['sb']))
 {
-	if(isset($_GET['sm']))
-		$_SESSION['sm'] = $_GET['sm'];
-	if(isset($_GET['sb']))
-		$_SESSION['sb'] = $_GET['sb'];
-	unset($_SESSION['nb']);
+    if(isset($_GET['sm']))
+        $_SESSION['sm'] = $_GET['sm'];
+    if(isset($_GET['sb']))
+        $_SESSION['sb'] = $_GET['sb'];
+    unset($_SESSION['nb']);
 }
 elseif(isset($_GET['nb']))
 {

@@ -11,22 +11,22 @@
 class gbook extends page
 {
     public static $name = 'Gästebuch';
-	public static $hasConfig = true;
+    public static $hasConfig = true;
     public static $shared_lists = Array('gbook');
-	
+    
     public function show()
     {
         global $_dico;
-		$_dico['de'] += Array(
-			'gbook' => 'Gästebuch',
+        $_dico['de'] += Array(
+            'gbook' => 'Gästebuch',
             'adde' => 'Eintrag hinzufügen',
             'deny' => 'Sie haben vor kurzem schon einen Eintrag hinzugefügt!'
-		);
-		$_dico['en'] += Array(
-			'gbook' => 'Guestbook',
+        );
+        $_dico['en'] += Array(
+            'gbook' => 'Guestbook',
             'adde' => 'Add entry',
             'deny' => 'You recently already added an entry!'
-		);
+        );
         
         if(isset($_GET['add']))
         {
@@ -65,21 +65,21 @@ class gbook extends page
         
         $gbooka = self::getSharedListArray('gbook');
         $page = intval($_GET['page']);
-		if(count($gbooka) == 0)
+        if(count($gbooka) == 0)
             $gbook = Array('$iKein Eintrag vorhanden.');
-		else
-		{
-			ksort($gbooka);
-		    $gbook = array_reverse($gbooka, false);
-    		$gbook = array_slice($gbook, 3*$page, 3);
+        else
+        {
+            ksort($gbooka);
+            $gbook = array_reverse($gbooka, false);
+            $gbook = array_slice($gbook, 3*$page, 3);
             
             function exploder($x)
             {
                 $ret = explode("&#0;", $x, 2);
                 return $ret[1];
             }
-    		$gbook = array_map('exploder', $gbook);
-		}
+            $gbook = array_map('exploder', $gbook);
+        }
         
         echo '<label posn="0 0 0" style="TextRankingsBig" textid="gbook"/>
         <frame posn="-1 -4 0">
@@ -111,18 +111,18 @@ class gbook extends page
     public function configure()
     {
         global $_dico, $_db;
-		$_dico['de'] += Array(
-			'edit' => '$fffBearbeiten',
+        $_dico['de'] += Array(
+            'edit' => '$fffBearbeiten',
             'delete' => '$fffEntfernen',
             'apply' => 'Übernehmen',
             'delold' => "Alle löschen außer\ndie neuesten"
-		);
-		$_dico['en'] += Array(
-			'edit' => '$fffEdit',
+        );
+        $_dico['en'] += Array(
+            'edit' => '$fffEdit',
             'delete' => '$fffDelete',
             'apply' => 'Apply',
             'delold' => "Delete all except\nthe newest"
-		);
+        );
         $this->endpos = '50 -54 1';
         
         if(isset($_GET['edit']))
@@ -167,13 +167,13 @@ class gbook extends page
         array_walk($gbooka, '_walker');
         ksort($gbooka);
         $gbook = array_reverse($gbooka, false);
-		$gbook = array_slice($gbook, 3*$page);
+        $gbook = array_slice($gbook, 3*$page);
         function _exploder_g($x)
         {
             $ret = explode("&#0;", $x['text'], 2);
             return array('text' => $ret[1], 'id' => $x['id']);
         }
-		$gbook = array_map('_exploder_g', $gbook);
+        $gbook = array_map('_exploder_g', $gbook);
         echo '<frame posn="-1 0 0">
             <quad posn="0 0 0" sizen="100 17" style="Bgs1" substyle="BgList"/>
             <label posn="1 -1 1" sizen="100" autonewline="1">'.$gbook[0]['text'].'</label>';

@@ -11,141 +11,141 @@
 class tracks extends page
 {
     public static $name = 'Strecken';
-	public static $desc = 'Eine Seite, von der Besucher Strecken herunterladen können.';
-	public static $hasConfig = true;
-	public static $shared_lists = Array('tracks');
-	
+    public static $desc = 'Eine Seite, von der Besucher Strecken herunterladen können.';
+    public static $hasConfig = true;
+    public static $shared_lists = Array('tracks');
+    
     public function show()
     {
-		global $_dico;
-		$_dico['de'] += Array(
-			'addc' => 'Kommentar hinzufügen',
-			'cinfo' => "Nicht mehr als zwei Kommentare hintereinander sind erlaubt.\nMaximal 100 Zeichen.",
+        global $_dico;
+        $_dico['de'] += Array(
+            'addc' => 'Kommentar hinzufügen',
+            'cinfo' => "Nicht mehr als zwei Kommentare hintereinander sind erlaubt.\nMaximal 100 Zeichen.",
             'notracks' => '$iKeine Strecken gefunden.'
-		);
-		$_dico['en'] += Array(
-			'addc' => 'Add comment',
-			'cinfo' => "Not more than two comments in a row.\n100 characters max.",
+        );
+        $_dico['en'] += Array(
+            'addc' => 'Add comment',
+            'cinfo' => "Not more than two comments in a row.\n100 characters max.",
             'notracks' => '$iNo tracks found.'
-		);
-		
-		if(isset($_GET['addc']))
-		{
-			$track = self::getSharedListItem('tracks', $_GET['info']);
+        );
+        
+        if(isset($_GET['addc']))
+        {
+            $track = self::getSharedListItem('tracks', $_GET['info']);
             $deny1 = explode("&#0;", $track->comments[0], 2);
-			$deny2 = explode("&#0;", $track->comments[1], 2);
-			if($deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'])
+            $deny2 = explode("&#0;", $track->comments[1], 2);
+            if($deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'])
                 return;
-			if($_GET['addc'] != '')
-			{
-				$comment = substr($_GET['addc'], 0, 100);
-				$comment = htmlspecialchars($comment);
+            if($_GET['addc'] != '')
+            {
+                $comment = substr($_GET['addc'], 0, 100);
+                $comment = htmlspecialchars($comment);
                 $cooment = stripslashes($comment);
-				$comment = "$_GET[playerlogin]&#0;".stripslashes("$_GET[nickname]\$z\n$comment");
-				array_unshift($track->comments, $comment);
-				self::setSharedListItem('tracks', intval($_GET['info']), $track);
-			}
-			else
-			{
-				echo '<label posn="18 0 0" halign="center" style="TextRankingsBig" textid="addc"/>
-				<frame posn="0 -4 0">
-					<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-					<entry posn="1 -1 0" sizen="34 14.67" autonewline="1" name="comment"/>
-				</frame>
-				<frame posn="0 -20.67 0">
-					<quad posn="0 0 0" sizen="36 15" style="Bgs1" substyle="BgList"/>
-					<label posn="1 -1 0" sizen="34" autonewline="1" textid="cinfo"/>
-					<label posn="18 -10.25 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;addc=comment" addplayerid="1" textid="addc"/>
-				</frame>';
-				return;
-			}
-		}
-		if(isset($_GET['info']))
-		{
-			$track = self::getSharedListItem('tracks', $_GET['info']);
-			$moods_de = Array('Sunrise' => 'Morgen', 'Day' => 'Tag', 'Sunset' => 'Abend', 'Night' => 'Nacht');
-			$types_de = Array('Race' => 'Rennen', 'Platform' => 'Platform', 'Stunt' => 'Stunt');
-			$length = round($track->authortime/100);
-			$length = sprintf('%d:%02d', floor($length/60), $length % 60);
-			$_dico['de']['info'] = "Autor: $track->author
+                $comment = "$_GET[playerlogin]&#0;".stripslashes("$_GET[nickname]\$z\n$comment");
+                array_unshift($track->comments, $comment);
+                self::setSharedListItem('tracks', intval($_GET['info']), $track);
+            }
+            else
+            {
+                echo '<label posn="18 0 0" halign="center" style="TextRankingsBig" textid="addc"/>
+                <frame posn="0 -4 0">
+                    <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                    <entry posn="1 -1 0" sizen="34 14.67" autonewline="1" name="comment"/>
+                </frame>
+                <frame posn="0 -20.67 0">
+                    <quad posn="0 0 0" sizen="36 15" style="Bgs1" substyle="BgList"/>
+                    <label posn="1 -1 0" sizen="34" autonewline="1" textid="cinfo"/>
+                    <label posn="18 -10.25 1" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;addc=comment" addplayerid="1" textid="addc"/>
+                </frame>';
+                return;
+            }
+        }
+        if(isset($_GET['info']))
+        {
+            $track = self::getSharedListItem('tracks', $_GET['info']);
+            $moods_de = Array('Sunrise' => 'Morgen', 'Day' => 'Tag', 'Sunset' => 'Abend', 'Night' => 'Nacht');
+            $types_de = Array('Race' => 'Rennen', 'Platform' => 'Platform', 'Stunt' => 'Stunt');
+            $length = round($track->authortime/100);
+            $length = sprintf('%d:%02d', floor($length/60), $length % 60);
+            $_dico['de']['info'] = "Autor: $track->author
 Umgebung: $track->envi
 Länge: $length min
 Typ: {$types_de[$track->type]}
 Tageszeit: {$moods_de[$track->mood]}
 Schwierigkeit: ";
-			$_dico['en']['info'] = "Author: $track->author
+            $_dico['en']['info'] = "Author: $track->author
 Environment: $track->envi
 Length: $length min
 Type: $track->type
 Mood: $track->mood
 Difficulty: ";
-			if($track->desc == '')
-			{
-				$_dico['en']['desc'] = '$iNo description.';
-				$_dico['de']['desc'] = '$iKeine Beschreibung vorhanden.';
-			}
-			else
-				$_dico['en']['desc'] = $track->desc;
-			$page = intval($_GET['cpage']);
-			if(count($track->comments) == 0)
+            if($track->desc == '')
             {
-				$comments = Array('$iKein Kommentar vorhanden.');
+                $_dico['en']['desc'] = '$iNo description.';
+                $_dico['de']['desc'] = '$iKeine Beschreibung vorhanden.';
+            }
+            else
+                $_dico['en']['desc'] = $track->desc;
+            $page = intval($_GET['cpage']);
+            if(count($track->comments) == 0)
+            {
+                $comments = Array('$iKein Kommentar vorhanden.');
                 $deny = false;
             }
-			else
-			{
-				$deny1 = explode("&#0;", $track->comments[0], 2);
-				$deny2 = explode("&#0;", $track->comments[1], 2);
-				$deny = $deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'];
-				$comments = array_slice($track->comments, 3*$page);
+            else
+            {
+                $deny1 = explode("&#0;", $track->comments[0], 2);
+                $deny2 = explode("&#0;", $track->comments[1], 2);
+                $deny = $deny1[0] == $deny2[0] && $deny1[0] == $_GET['playerlogin'];
+                $comments = array_slice($track->comments, 3*$page);
                 
                 function exploder($x)
                 {
                     $ret = explode("&#0;", $x, 2);
                     return $ret[1];
                 }
-				$comments = array_map('exploder', $comments);
-			}
-			echo '<quad posn="-1 1 0" sizen="65 33.5" style="Bgs1" substyle="BgList"/>
-			<label posn="32 0 1" halign="center" textsize="4" text="'.$track->name.'"/>
-			<quad posn="0 -4 1" sizen="30 22.5" image="./'.$track->getImage().'"/>
-			<label posn="31 -4 1" textsize="4" textid="info"/>
-			<quad posn="46 -22.5 1" sizen="5 5" style="Icons128x128_1" substyle="'.$track->difficulty.'"/>
-			<label posn="32 -27.5 1" halign="center" style="CardButtonMedium" manialink="'.$this->getConfig('code', '').'?id='.$track->id.'" text="Download"/>
-			<quad posn="-1 -33 0" sizen="65 22" style="Bgs1" substyle="BgList"/>
-			<label posn="0 -34 0" sizen="63" autonewline="1" textid="desc"/>
-			<frame posn="64.5 1 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0].'</label>
-			</frame>
-			<frame posn="64.5 -15.67 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1].'</label>
-			</frame>
-			<frame posn="64.5 -32.33 0">
-				<quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
-				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2].'</label>
-			</frame>
-			<frame posn="64.5 -49 0">
-				<quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>';
-			if(!$deny)
-				echo '<label posn="18 -1 2" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;addc" textid="addc" addplayerid="1"/>';
-			if($page == 0)
-				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
-			else
-				echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;cpage='.($page-1).'"/>';
-			if($page >= count($track->comments)/3-1)
-				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
-			else
-				echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;cpage='.($page+1).'"/>';
-			echo '</frame>';
-			return;
-		}
-		
-		echo '<label posn="0 0 0" style="TextRankingsBig" text="Tracks"/>
+                $comments = array_map('exploder', $comments);
+            }
+            echo '<quad posn="-1 1 0" sizen="65 33.5" style="Bgs1" substyle="BgList"/>
+            <label posn="32 0 1" halign="center" textsize="4" text="'.$track->name.'"/>
+            <quad posn="0 -4 1" sizen="30 22.5" image="./'.$track->getImage().'"/>
+            <label posn="31 -4 1" textsize="4" textid="info"/>
+            <quad posn="46 -22.5 1" sizen="5 5" style="Icons128x128_1" substyle="'.$track->difficulty.'"/>
+            <label posn="32 -27.5 1" halign="center" style="CardButtonMedium" manialink="'.$this->getConfig('code', '').'?id='.$track->id.'" text="Download"/>
+            <quad posn="-1 -33 0" sizen="65 22" style="Bgs1" substyle="BgList"/>
+            <label posn="0 -34 0" sizen="63" autonewline="1" textid="desc"/>
+            <frame posn="64.5 1 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0].'</label>
+            </frame>
+            <frame posn="64.5 -15.67 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1].'</label>
+            </frame>
+            <frame posn="64.5 -32.33 0">
+                <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>
+                <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2].'</label>
+            </frame>
+            <frame posn="64.5 -49 0">
+                <quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>';
+            if(!$deny)
+                echo '<label posn="18 -1 2" halign="center" style="CardButtonMedium" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;addc" textid="addc" addplayerid="1"/>';
+            if($page == 0)
+                echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
+            else
+                echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;cpage='.($page-1).'"/>';
+            if($page >= count($track->comments)/3-1)
+                echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
+            else
+                echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.$this->url.'&amp;info='.$track->id.'&amp;cpage='.($page+1).'"/>';
+            echo '</frame>';
+            return;
+        }
+        
+        echo '<label posn="0 0 0" style="TextRankingsBig" text="Tracks"/>
         <label posn="0 -52.5 0" textid="pages"/>';
-		$tracks = self::getSharedListArray('tracks');
-		ksort($tracks);
+        $tracks = self::getSharedListArray('tracks');
+        ksort($tracks);
         $tracks = array_reverse($tracks, false);
         function _filterer_p($track)
         {
@@ -166,27 +166,27 @@ Difficulty: ";
         $_dico['en']['pages'] = 'Pages'.$ps;
         if(!$tracks)
             echo '<label posn="0 -5 0" textid="notracks"/>';
-		$tracks = array_slice($tracks, 8*$seite);
-		for($i = 0; $i < 8; $i++)
-		{
-			$pos = ($i < 4) ? '0 '.(-4-12*$i).' 0' : '50 '.(44-12*$i).' 0';
-			$track = $tracks[$i];
-			if(!$track)
-				break;
-			echo '<frame posn="'.$pos.'">
-			<quad posn="0 0 0" sizen="49 11" style="BgsPlayerCard" substyle="BgCard" manialink="'.$this->url.'&amp;info='.$track->id.'" addplayerid="1"/>
-			<quad posn="1 -1 1" sizen="12 9" image="./'.$track->getImage().'"/>
-			<label posn="14 -1 0" textsize="4" text="'.htmlspecialchars($track->name).'"/>
-			<label posn="14 -4.5 0">'.$track->author."\nDownloads: ".$track->downloads.'</label>
-			</frame>';
-		}
+        $tracks = array_slice($tracks, 8*$seite);
+        for($i = 0; $i < 8; $i++)
+        {
+            $pos = ($i < 4) ? '0 '.(-4-12*$i).' 0' : '50 '.(44-12*$i).' 0';
+            $track = $tracks[$i];
+            if(!$track)
+                break;
+            echo '<frame posn="'.$pos.'">
+            <quad posn="0 0 0" sizen="49 11" style="BgsPlayerCard" substyle="BgCard" manialink="'.$this->url.'&amp;info='.$track->id.'" addplayerid="1"/>
+            <quad posn="1 -1 1" sizen="12 9" image="./'.$track->getImage().'"/>
+            <label posn="14 -1 0" textsize="4" text="'.htmlspecialchars($track->name).'"/>
+            <label posn="14 -4.5 0">'.$track->author."\nDownloads: ".$track->downloads.'</label>
+            </frame>';
+        }
     }
-	
-	public function configure()
-	{
+    
+    public function configure()
+    {
         global $_dico;
-		$_dico['de'] += Array(
-			'tracksv' => 'Strecken verwalten',
+        $_dico['de'] += Array(
+            'tracksv' => 'Strecken verwalten',
             'author' => 'Autor:',
             'authortime' => 'Autorzeit:',
             'type' => 'Typ:',
@@ -211,9 +211,9 @@ Difficulty: ";
             'edit' => '$fffBearbeiten',
             'fromtmx' => "Von TM-United-Exchange",
             'tmxid' => 'TMX-ID:'
-		);
-		$_dico['en'] += Array(
-			'tracksv' => 'Manage tracks',
+        );
+        $_dico['en'] += Array(
+            'tracksv' => 'Manage tracks',
             'author' => 'Author:',
             'authortime' => 'Autor time:',
             'type' => 'Type:',
@@ -238,7 +238,7 @@ Difficulty: ";
             'edit' => '$fffEdit',
             'fromtmx' => "From TM-United-Exchange",
             'tmxid' => 'TMX-ID:'
-		);
+        );
         
         if(isset($_GET['delete']))
         {
@@ -448,40 +448,40 @@ Difficulty: ";
                     $ret = explode("&#0;", $x, 2);
                     $x = array($ret[1], $k);
                 }
-				array_walk($comments, '_walker_t');
+                array_walk($comments, '_walker_t');
                 $comments = array_slice($comments, 3*$page);
                 echo '<frame posn="25 -5 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[0]))
                     echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;editc='.$comments[0][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;delc='.$comments[0][1].'"/>
-    				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0][0].'</label>';
-    			echo '</frame>
-    			<frame posn="25 -21.67 0">
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[0][0].'</label>';
+                echo '</frame>
+                <frame posn="25 -21.67 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[1]))
-    				echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;editc='.$comments[1][1].'"/>
+                    echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;editc='.$comments[1][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;delc='.$comments[1][1].'"/>
-    				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1][0].'</label>';
-    			echo '</frame>
-    			<frame posn="25 -38.33 0">
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[1][0].'</label>';
+                echo '</frame>
+                <frame posn="25 -38.33 0">
                     <quad posn="0 0 0" sizen="36 16.67" style="Bgs1" substyle="BgList"/>';
                 if(isset($comments[2]))
-       				echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;editc='.$comments[2][1].'"/>
+                    echo '<label posn="37 -1 0" style="TextCardScores2" textid="edit" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;editc='.$comments[2][1].'"/>
                     <label posn="37 -4.5 0" style="TextCardScores2" textid="delete" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;delc='.$comments[2][1].'"/>
-       				<label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2][0].'</label>';
-    			echo '</frame>
+                    <label posn="1 -1 1" sizen="36" autonewline="1">'.$comments[2][0].'</label>';
+                echo '</frame>
                 <frame posn="25 -55 0">
-				<quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>
+                <quad posn="0 0 1" sizen="36 6" style="Bgs1" substyle="BgList"/>
                 <label posn="18 -1 1" halign="center" style="CardButtonMedium" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'" text="Back"/>';
                 if($page == 0)
-    				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
-    			else
-    				echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;cpage='.($page-1).'"/>';
-    			if($page >= count($track->comments)/3-1)
-    				echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
-    			else
-    				echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;cpage='.($page+1).'"/>';
+                    echo '<quad style="Icons64x64_1" substyle="StarGold" posn="1.2 -3 2" sizen="3.5 3.5" valign="center"/>';
+                else
+                    echo '<quad style="Icons64x64_1" substyle="ArrowPrev" posn="1.2 -3 2" sizen="3.5 3.5" valign="center" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;cpage='.($page-1).'"/>';
+                if($page >= count($track->comments)/3-1)
+                    echo '<quad style="Icons64x64_1" substyle="StarGold" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right"/>';
+                else
+                    echo '<quad style="Icons64x64_1" substyle="ArrowNext" posn="34.8 -3 2" sizen="3.5 3.5" valign="center" halign="right" manialink="'.htmlspecialchars($this->url).'&amp;track='.$track->id.'&amp;commv&amp;cpage='.($page+1).'"/>';
                 echo '</frame>';
                 return;
             }
@@ -501,7 +501,7 @@ Difficulty: ";
             
             $this->save($track);
             $length = round($track->authortime/100);
-			$length = sprintf('%d:%02d', floor($length/60), $length % 60);
+            $length = sprintf('%d:%02d', floor($length/60), $length % 60);
             echo '<label posn="0 0 0" style="TextRankingsBig" textid="tracksv"/>
             <label posn="0 -5 0" text="Name:"/>
             <entry posn="14 -5 0" sizen="25 2.5" default="'.$track->name.'" name="name"/>
@@ -550,7 +550,7 @@ Difficulty: ";
             }
         }
         return;
-	}
+    }
     
     public function save(&$track = NULL)
     {
